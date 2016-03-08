@@ -900,4 +900,17 @@ Sets a connection group for the current chain query
 ###reset_connection()
 Resets the connection to the database to the one that is set for the model or the default connection
 
+###sum('field', 'where')
+Standalone feature for summing a field in your search
+where is passed to the internal where field, so just use an array or two values as you would normally do.
+
+###search('field(s)', 'query')
+Chainable
+Searches string field or array fields for query as "LIKE %query%"
+####usage
+$this->MODELNAME->where('a', 1)->search('name', 'Fred')->get_all(); //sting as first search argument
+$this->MODELNAME->where('a', 1)->search(['first_name','last_name'], 'Fred')->get_all(); //array as first search argument
+
 Enjoy using my MY_Model and please report any issues or try some pull requests. Thank you
+
+
