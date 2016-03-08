@@ -1873,7 +1873,6 @@ class MY_Model extends CI_Model
      * @param $query search query
      * @return this object to continue query chaining
      *
-     * todo: add if array logic to search multiple fields or queries
      */
     public function search($field, $query){
         if(is_array($field)){
