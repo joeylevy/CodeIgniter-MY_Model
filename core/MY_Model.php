@@ -1847,4 +1847,62 @@ class MY_Model extends CI_Model
 	    return $data;
     }
     */
+    
+     /**SUM 
+      * (STANDALONE - not chainable)
+      * sum does what you think it would. It sums a field using the where second argument.
+      * 
+     * @param string $key Name of field to sum
+     * @param array $where All where arguments
+     * @return object mixed
+     */
+    public function sum($key, $where = array()){
+        $this->where($where);
+        $this->_database->select_sum($key, 'sum');
+        $this->_database->from($this->table);
+        return $this->_database->get()->row('sum');
+
+    }
+
+    /** Search for 'query' in 'field(s)'
+     * searches for $query in string or array field, passes to next in chain
+     * 
+     * usage: $this->YOUR_MODEL->search('bob', ['name','address', fullName])->limit(5)->get_all();
+     * 
+     * @param $field string or array - field or list of fields to search through
+     * @param $query search query
+     * @return this object to continue query chaining
+     *
+     * todo: add if array logic to search multiple fields or queries
+     */
+    public function search($field, $query){
+        if(is_array($field)){
+                foreach(array_values($field) as $key => $f){
+
+                    if(is_array($f)){ //we cant use multidimensional arrays. stop and error out
+                        show_error('Do not use multidimensional arrays in ->search(field, query). You can use arrays or a string for field name.');
+                        exit;
+                    }//end if
+
+                    if($key == 0){
+                        //begin codeigniter group of like statements
+                        $this->_database->group_start();
+                        //first time through, just add a regular like
+                        $this->_database->like($f, $query);
+                    }else{
+                        //all other passes get an or_like
+                        $this->_database->or_like($f, $query);
+                    }
+
+                }//end foreach
+                $this->_database->group_end(); //after we are done, end grouping
+
+        }else{
+            $this->_database->like($field, $query);
+        }
+        return $this;
+//my_model method: $this->where($field[0] . ' LIKE ',  '%' . $query . '%');
+
+}
+
 }
