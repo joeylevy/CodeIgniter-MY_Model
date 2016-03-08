@@ -904,7 +904,7 @@ Resets the connection to the database to the one that is set for the model or th
 Standalone feature for summing a field in your search
 where is passed to the internal where field, so just use an array or two values as you would normally do.
 
-###search('field(s)', 'query')
+###search('field[s]', 'query')
 Chainable
 Searches string field or array fields for query as "LIKE %query%"
 ####usage
